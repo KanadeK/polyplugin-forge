@@ -1,0 +1,13 @@
+node_modules/
+dist/
+coverage/
+dist-release/
+demo-output/
+.polyplugin/
+*.log
+*.tgz
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db

@@ -1,0 +1,75 @@
+{
+  "name": "polyplugin-forge",
+  "version": "0.1.0",
+  "description": "Unified plugin scaffolding, manifest validation, preflight checks, and compatibility reports for MCP, VS Code, Chrome, and webhooks.",
+  "type": "module",
+  "bin": {
+    "polyplugin": "./dist/cli.js"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "templates",
+    "schemas",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22.0.0 <25"
+  },
+  "packageManager": "pnpm@11.9.0",
+  "workspaces": [
+    "examples/*"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "clean": "node scripts/clean.mjs",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
+    "verify": "npm run format:check && npm run lint && npm run typecheck && npm run test:coverage && npm run build"
+  },
+  "keywords": [
+    "plugins",
+    "mcp",
+    "vscode-extension",
+    "browser-extension",
+    "scaffolding"
+  ],
+  "author": "KanadeK",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KanadeK/polyplugin-forge.git"
+  },
+  "bugs": {
+    "url": "https://github.com/KanadeK/polyplugin-forge/issues"
+  },
+  "homepage": "https://github.com/KanadeK/polyplugin-forge#readme",
+  "dependencies": {
+    "commander": "15.0.0",
+    "handlebars": "4.7.9",
+    "semver": "7.8.5",
+    "yaml": "2.9.0",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.61.1",
+    "@types/node": "26.1.1",
+    "@types/semver": "7.7.1",
+    "@vitest/coverage-v8": "4.1.10",
+    "eslint": "10.7.0",
+    "fflate": "0.8.3",
+    "prettier": "3.9.6",
+    "tsx": "4.23.1",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.65.0",
+    "vitest": "4.1.10"
+  }
+}
