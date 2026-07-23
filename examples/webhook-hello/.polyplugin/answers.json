@@ -1,0 +1,6 @@
+{
+  "description": "Serves a deterministic loopback POST greeting.",
+  "displayName": "Hello Webhook",
+  "packageName": "hello-webhook",
+  "pluginId": "hello.webhook"
+}

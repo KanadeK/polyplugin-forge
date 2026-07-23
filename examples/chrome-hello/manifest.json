@@ -1,0 +1,18 @@
+{
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Hello Chrome"
+  },
+  "background": {
+    "service_worker": "dist/index.js",
+    "type": "module"
+  },
+  "description": "Greets a user from an accessible Manifest V3 popup.",
+  "manifest_version": 3,
+  "minimum_chrome_version": "120",
+  "name": "Hello Chrome",
+  "permissions": [
+    "storage"
+  ],
+  "version": "0.1.0"
+}

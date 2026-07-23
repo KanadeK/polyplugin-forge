@@ -1,0 +1,80 @@
+apiVersion: polyplugin.dev/v1alpha1
+kind: Plugin
+metadata:
+  id: "hello.chrome"
+  name: "Hello Chrome"
+  version: 0.1.0
+  description: "Greets a user from an accessible Manifest V3 popup."
+  license: MIT
+  package: "hello-chrome"
+runtime:
+  language: node
+  node: ">=22.0.0 <25"
+  source: src/index.js
+  entry: dist/index.js
+target:
+  type: chrome
+  manifestVersion: 3
+  minimumChromeVersion: "120"
+capabilities:
+  - id: greeting-popup
+    type: chrome.popup
+    name: greeting-popup
+    title: "Hello Chrome"
+    description: "Greets a user from an accessible Manifest V3 popup."
+    handler: src/popup.js
+    permissions: []
+    tests:
+      - tests/popup.test.js
+    path: popup.html
+  - id: greeting-background
+    type: chrome.background
+    name: greeting-background
+    title: Greeting background service
+    description: Creates greetings and remembers the last entered name.
+    handler: src/index.js
+    permissions:
+      - local-greeting
+    tests:
+      - tests/background.test.js
+      - tests/greeting.test.js
+permissions:
+  - id: local-greeting
+    kind: storage.local
+    resources:
+      - lastName
+    reason: Remembers the last entered name in Chrome local extension storage.
+dataFlows:
+  - id: greeting-name-input
+    capability: greeting-background
+    direction: inbound
+    source: extension popup
+    destination: Chrome local extension storage
+    data:
+      - name: greeting name
+        classification: user-content
+    purpose: Personalizes the greeting and restores the last entered name.
+    retention: persistent
+privacy:
+  notice: docs/PRIVACY.md
+  collectsPersonalData: false
+  telemetry: false
+compatibility:
+  os:
+    - linux
+    - darwin
+    - win32
+  arch:
+    - x64
+    - arm64
+  targetVersions:
+    - ">=120"
+  features:
+    - manifest-v3
+    - module-service-worker
+    - popup
+    - storage.local
+tests:
+  command:
+    - npm
+    - test

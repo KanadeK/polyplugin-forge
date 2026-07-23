@@ -1,0 +1,6 @@
+{
+  "description": "Registers a real VS Code greeting command.",
+  "displayName": "Hello VS Code",
+  "packageName": "hello-vscode",
+  "pluginId": "hello.vscode"
+}

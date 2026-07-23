@@ -1,0 +1,13 @@
+# Privacy
+
+{{displayName}} processes the `name` supplied to the `hello` MCP tool only in
+memory and returns it in a greeting.
+
+- No input is persisted.
+- No network request is made.
+- No telemetry is collected.
+- No secret, account, or device identifier is requested.
+
+The trust boundary is the process standard input and output. The host launching
+`{{packageName}}` is responsible for controlling which clients can access that
+process.

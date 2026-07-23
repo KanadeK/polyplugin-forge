@@ -1,0 +1,71 @@
+apiVersion: polyplugin.dev/v1alpha1
+kind: Plugin
+metadata:
+  id: "hello.webhook"
+  name: "Hello Webhook"
+  version: 0.1.0
+  description: "Serves a deterministic loopback POST greeting."
+  license: MIT
+  package: "hello-webhook"
+runtime:
+  language: node
+  node: ">=22.0.0 <25"
+  source: src/server.js
+  entry: dist/server.js
+target:
+  type: webhook
+  openapiVersion: 3.1.0
+  host: 127.0.0.1
+  authentication: none
+capabilities:
+  - id: hello
+    type: webhook.route
+    name: hello
+    title: Say hello
+    description: Accept a name and return a deterministic JSON greeting.
+    handler: hello
+    permissions:
+      - loopback-listen
+    tests:
+      - tests/server.test.js
+    inputSchema: schemas/hello.input.json
+    method: POST
+    path: /hello
+permissions:
+  - id: loopback-listen
+    kind: network.listen
+    resources:
+      - 127.0.0.1
+    reason: Listen only on the local loopback interface for webhook requests.
+dataFlows:
+  - id: hello-request
+    capability: hello
+    direction: inbound
+    source: loopback HTTP client
+    destination: hello route
+    data:
+      - name: name
+        classification: user-content
+    purpose: Produce the requested greeting.
+    retention: none
+privacy:
+  notice: docs/PRIVACY.md
+  collectsPersonalData: false
+  telemetry: false
+compatibility:
+  os:
+    - linux
+    - darwin
+    - win32
+  arch:
+    - x64
+    - arm64
+  targetVersions:
+    - "3.1.0"
+  features:
+    - http
+    - loopback
+tests:
+  command:
+    - npm
+    - test

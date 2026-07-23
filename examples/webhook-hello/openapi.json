@@ -1,0 +1,69 @@
+{
+  "info": {
+    "description": "Serves a deterministic loopback POST greeting.",
+    "license": {
+      "name": "MIT"
+    },
+    "title": "Hello Webhook",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/hello": {
+      "post": {
+        "description": "Accept a name and return a deterministic JSON greeting.",
+        "operationId": "hello",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schemas/hello.input.json"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        },
+        "security": [],
+        "summary": "Say hello",
+        "x-polyplugin-handler": "hello",
+        "x-polyplugin-permissions": [
+          "loopback-listen"
+        ]
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:{port}",
+      "variables": {
+        "port": {
+          "default": "3000",
+          "description": "Local webhook server port"
+        }
+      }
+    }
+  ],
+  "x-polyplugin-data-flows": [
+    {
+      "capability": "hello",
+      "data": [
+        {
+          "classification": "user-content",
+          "name": "name"
+        }
+      ],
+      "destination": "hello route",
+      "direction": "inbound",
+      "id": "hello-request",
+      "purpose": "Produce the requested greeting.",
+      "retention": "none",
+      "source": "loopback HTTP client"
+    }
+  ],
+  "x-polyplugin-runtime-entry": "dist/server.js"
+}

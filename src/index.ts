@@ -21,6 +21,12 @@ export {
   scanFilesForSecrets,
   scanTextForSecrets
 } from "./core/secret-scanner.js";
+export {
+  INITIAL_TEMPLATE_VERSION,
+  renderTemplate,
+  validateTemplateAnswers,
+  validateTemplatePath
+} from "./core/template-renderer.js";
 export { planUpgrade } from "./core/upgrade-planner.js";
 export { PERMISSION_KINDS, PLUGIN_TARGETS } from "./core/model.js";
 export {
@@ -43,6 +49,12 @@ export type {
   EvidenceState
 } from "./core/compatibility.js";
 export type { SecretScanSource } from "./core/secret-scanner.js";
+export type {
+  RenderedTemplate,
+  RenderedTemplateFile,
+  TemplateAnswers,
+  TemplateSourceFile
+} from "./core/template-renderer.js";
 export type {
   ConflictMaterialPlan,
   FileMaterial,

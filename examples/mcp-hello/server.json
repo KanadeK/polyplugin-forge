@@ -1,0 +1,16 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
+  "description": "Returns a deterministic greeting over MCP stdio.",
+  "name": "hello.mcp",
+  "packages": [
+    {
+      "identifier": "hello-mcp",
+      "registryType": "npm",
+      "transport": {
+        "type": "stdio"
+      },
+      "version": "0.1.0"
+    }
+  ],
+  "version": "0.1.0"
+}

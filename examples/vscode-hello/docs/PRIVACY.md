@@ -1,0 +1,21 @@
+# Privacy for Hello VS Code
+
+The generated `hello.vscode` command runs entirely inside the local VS Code
+extension host.
+
+By default, this extension:
+
+- collects no personal data;
+- sends no telemetry;
+- makes no network requests;
+- reads and writes no workspace files;
+- stores no command input or output.
+
+The greeting shown to the user is derived only from the static extension name.
+No secrets or credentials are requested.
+
+If maintainers add analytics, remote services, filesystem access, secrets, or
+persistent storage, they must update `plugin.yaml`, this notice, tests, and the
+permission rationale before release.
+
+Package identity: `hello-vscode`.

@@ -1,0 +1,18 @@
+{
+  "files": {
+    ".gitignore": "74d1a88e19df60766d797b6c4de3cb6043c6b925077b3bed9dd24abecf0a0937",
+    "docs/PRIVACY.md": "9017c8928023d0ffe48e6037f5d32a47458af623e6ac28125829f9eb4c1115bb",
+    "LICENSE": "43a5d730250d8fe9244e865f53bf75d4ba899a9da9fb6213eee574600422efde",
+    "package-lock.json": "1e11af201466d8293c69344906e92d62b875d99c27da5cf71c47bc2f81677dd6",
+    "package.json": "ceaf139b080e12abaee43ff42671f4551a8d2596496db3e8d8bc3508b26fbd05",
+    "plugin.yaml": "1b87d6b68c5f4ecdbe80cf2991946b466479c7217f09ae3c8ba4397e61894a29",
+    "README.md": "9bce25bd255229f2c3c3438b9bd5275f3083607f12a23dfe5e9b5a7700ed6636",
+    "schemas/hello.input.json": "234bdd0ef35f476bd69fe4b96d8f8439f30d680539b33911f29731856f516c4e",
+    "scripts/build.mjs": "2e6af7967059429951bd260cbd72926ca2897dc876325e1b105a171225301cb0",
+    "src/server.js": "c0ae8d942a83abfefbe6dfe2eab5314ee1fd5a48599d0f326f88c825173c80fa",
+    "tests/server.test.js": "ae9e253728ed2799d2ba11cb6492a08e4ba0498388ce52dc82a8373234a2ce63"
+  },
+  "schemaVersion": 1,
+  "template": "webhook",
+  "templateVersion": "1.0.0"
+}

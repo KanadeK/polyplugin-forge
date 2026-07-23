@@ -1,0 +1,6 @@
+{
+  "description": "Returns a deterministic greeting over MCP stdio.",
+  "displayName": "Hello MCP",
+  "packageName": "hello-mcp",
+  "pluginId": "hello.mcp"
+}

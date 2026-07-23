@@ -1,0 +1,65 @@
+apiVersion: polyplugin.dev/v1alpha1
+kind: Plugin
+metadata:
+  id: "hello.mcp"
+  name: "Hello MCP"
+  version: 0.1.0
+  description: "Returns a deterministic greeting over MCP stdio."
+  license: MIT
+  package: "hello-mcp"
+runtime:
+  language: node
+  node: ">=22.0.0 <25"
+  source: src/server.js
+  entry: dist/server.js
+target:
+  type: mcp
+  protocolVersion: "2025-06-18"
+  transport: stdio
+  registry:
+    type: npm
+    package: "hello-mcp"
+capabilities:
+  - id: hello
+    type: mcp.tool
+    name: hello
+    title: Say hello
+    description: Return a deterministic greeting for a supplied name.
+    handler: hello
+    permissions: []
+    tests:
+      - tests/server.test.js
+    inputSchema: schemas/hello.input.json
+permissions: []
+dataFlows:
+  - id: hello-input
+    capability: hello
+    direction: inbound
+    source: MCP client
+    destination: hello tool
+    data:
+      - name: name
+        classification: user-content
+    purpose: Produce the requested greeting.
+    retention: none
+privacy:
+  notice: docs/PRIVACY.md
+  collectsPersonalData: false
+  telemetry: false
+compatibility:
+  os:
+    - linux
+    - darwin
+    - win32
+  arch:
+    - x64
+    - arm64
+  targetVersions:
+    - "2025-06-18"
+  features:
+    - tools
+    - stdio
+tests:
+  command:
+    - npm
+    - test

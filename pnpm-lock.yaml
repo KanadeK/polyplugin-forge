@@ -61,6 +61,14 @@ importers:
         specifier: 4.1.10
         version: 4.1.10(@types/node@26.1.1)(@vitest/coverage-v8@4.1.10)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(tsx@4.23.1)(yaml@2.9.0))
 
+  examples/chrome-hello: {}
+
+  examples/mcp-hello: {}
+
+  examples/vscode-hello: {}
+
+  examples/webhook-hello: {}
+
 packages:
 
   '@babel/helper-string-parser@7.29.7':

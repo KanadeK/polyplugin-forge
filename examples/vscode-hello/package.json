@@ -1,0 +1,36 @@
+{
+  "activationEvents": [
+    "onCommand:hello.vscode"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "category": "Hello VS Code",
+        "command": "hello.vscode",
+        "title": "Hello VS Code"
+      }
+    ]
+  },
+  "description": "Registers a real VS Code greeting command.",
+  "displayName": "Hello VS Code",
+  "engines": {
+    "node": ">=22.0.0",
+    "vscode": "^1.95.0"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "license": "MIT",
+  "main": "./src/extension.js",
+  "name": "hello-vscode",
+  "private": true,
+  "publisher": "polyplugin",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test"
+  },
+  "type": "module",
+  "version": "0.1.0"
+}

@@ -1,0 +1,18 @@
+{
+  "files": {
+    ".gitignore": "74d1a88e19df60766d797b6c4de3cb6043c6b925077b3bed9dd24abecf0a0937",
+    "docs/PRIVACY.md": "eb73eb38ff9020a6678e89cce84fe2a126d72d77c66b8e45f7f0f545334975a7",
+    "LICENSE": "0ee1e289a7630350d31c55cc48cb5fbbeb0517f8d06a8390365b6518e5610d11",
+    "package-lock.json": "ad7c1e6e000cf92adab2cad9f7787a48fc9f296f900745c561f97038d30089de",
+    "package.json": "f5b4cf4762cc39cb9189f02e9b681be770f8dba0406929e360a7a762a91d4411",
+    "plugin.yaml": "22a04f1ad3da9944a5db97c2584208a2ae2fe4ab98dbcd488295e858e889e713",
+    "README.md": "c98a65497e5a776fc2f694adea42b961be91941edaaeb63d75694bdb070b8246",
+    "schemas/hello.input.json": "9c2e5cb2fbac9ebfaa29865d5c8ed325e9c650375bf9ab97674b5d4d8c55476a",
+    "scripts/build.mjs": "58c8a38dba06a43084d1ef14dffe2d5999224ab69c8670602aa363f230be2945",
+    "src/server.js": "1d6b20c53eccd6394cd2af2b82e7e430ac778cde56454a9d659e5ca74934d84c",
+    "tests/server.test.js": "884437e58591229b60987d9c24dd6a106f580bdbdc96caaf6983f52725ffcd6f"
+  },
+  "schemaVersion": 1,
+  "template": "mcp",
+  "templateVersion": "1.0.0"
+}

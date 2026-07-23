@@ -1,0 +1,26 @@
+{
+  "name": "hello-mcp",
+  "version": "0.1.0",
+  "description": "Returns a deterministic greeting over MCP stdio.",
+  "type": "module",
+  "bin": {
+    "hello-mcp": "./dist/server.js"
+  },
+  "files": [
+    "dist",
+    "schemas",
+    "plugin.yaml",
+    "README.md",
+    "docs/PRIVACY.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test",
+    "verify": "npm run build && npm test"
+  },
+  "engines": {
+    "node": ">=22.0.0 <25"
+  },
+  "license": "MIT"
+}

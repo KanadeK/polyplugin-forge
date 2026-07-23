@@ -1,0 +1,23 @@
+{
+  "files": {
+    ".gitignore": "7725efc944f2b815b36a3091e8f196cfe17b900ffe7edb41aa68c31a2db5c787",
+    "docs/PRIVACY.md": "4a6c6643eeb5e00f34c22a0b9c4f58a5860fbc29b45b11f97c919a607f8d97d4",
+    "LICENSE": "75cffad0ddfd024a206f5fd23cf1ca4143191dceadb88959d1cd8e3b7fe3f094",
+    "package-lock.json": "cffaa77ec1b67e89d2b9163e4cc7418e5c2f484bb1d48aa1a384d2eb7f59afac",
+    "package.json": "5a09cdd8b4b77f0d3fc7c4b221a9946f4ca1eb317adb054e46029a5fc7148577",
+    "plugin.yaml": "49b1659340fbc180c2432763ff79bf58e195a7f1a9b7ce1f64ea0f5db26364b7",
+    "popup.css": "10e9e547294e8d28bc2ab2043666e29bda6fa5b7a87e180daa0cf1ee33d1ae77",
+    "popup.html": "734734a702e07f1a5ebb39781c540b983ced5d82dc52f45b8f27559f72445e23",
+    "README.md": "69234a14793b89b8096ee6c93b8ed37b94088fb340da6d7270ffdbeaa2369f9f",
+    "scripts/build.mjs": "833fccb54cfb1276d3a68fc7f5aa85cd419f2b9279952c3ebf55967de9622e23",
+    "src/greeting.js": "c20c43c38bdc4bf52a29f6fd488279bcb8340d4e7505304f34c6555882326e25",
+    "src/index.js": "5fa83fd13c06352d48fbe25b810171ce8586a24954ff10b0117c094a8a67169e",
+    "src/popup.js": "0316351f840c105c53b7b824a6497bdddf03493e333f082665bb3d5a2b232c94",
+    "tests/background.test.js": "d88ae2f4ffed0aac8e59122ae4a7764fecf372dcb3291759fdfa0223c02237e7",
+    "tests/greeting.test.js": "2b7fa1810c52e2090342e18e1a47727ff8e831fa37095bf7aa78f0b114e8514e",
+    "tests/popup.test.js": "53d645569f09692b79d1d62ff06c7a212707240ec3d28a612a5c52ba799d89e8"
+  },
+  "schemaVersion": 1,
+  "template": "chrome",
+  "templateVersion": "1.0.0"
+}

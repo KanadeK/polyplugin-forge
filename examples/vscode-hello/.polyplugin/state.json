@@ -1,0 +1,17 @@
+{
+  "files": {
+    ".gitignore": "c62569bb3593b49132a9a373f65b38b41ae1c4761ea643585d39149e19612400",
+    "docs/PRIVACY.md": "90236b1e6fe22375ffa346978b4bfd13d4aba0e9c94a02d2221603e4d7d6c0ef",
+    "LICENSE": "29d264a68d7cf2f03617520fcd710bfc4e43dfb2662e3817389c5f602d527463",
+    "package-lock.json": "43612f86f97f705d65b5751dedb7223e0ee6b0c6852c8179ed484bad9fa78191",
+    "package.json": "3700828e6d0316c95992c6ec580530a8563170bf5b48cbbc91d6298f3ceb0e14",
+    "plugin.yaml": "c9d74be0bfa285724f958cc5b5f4f8fbee8b9088f343eb0efb21366a8037baf8",
+    "README.md": "da9baa1ca4766b442a86625679f1f704f4cc3f3dda4f5eeb8b5d804f41fbf897",
+    "scripts/build.mjs": "8a5462bf742069e443740bc500c0a53793697c09ea65dcb12dbb12525eafbb02",
+    "src/extension.js": "02a9e24d45550d17de63d2988d5045623c81ab3155dd9f8ae7200d3a603a3c97",
+    "test/extension.test.js": "c3a20b06cde275ca04e33c842bc0cbd4cacf5e4aa899930fd9e2bab7949ab56a"
+  },
+  "schemaVersion": 1,
+  "template": "vscode",
+  "templateVersion": "1.0.0"
+}

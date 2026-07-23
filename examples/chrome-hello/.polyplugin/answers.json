@@ -1,0 +1,6 @@
+{
+  "description": "Greets a user from an accessible Manifest V3 popup.",
+  "displayName": "Hello Chrome",
+  "packageName": "hello-chrome",
+  "pluginId": "hello.chrome"
+}
