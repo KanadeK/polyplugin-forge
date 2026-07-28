@@ -50,6 +50,7 @@ describe("GitHub workflow configuration", () => {
         resolve(projectRoot, ".github", "workflows", name),
         "utf8"
       );
+      const normalizedSource = source.replaceAll("\r\n", "\n");
       const document = parseDocument(source, {
         schema: "core",
         strict: true,
@@ -64,10 +65,10 @@ describe("GitHub workflow configuration", () => {
         throw new Error(`${name} did not parse to an object`);
       }
       expect("jobs" in value).toBe(true);
-      expect(source).toContain("permissions:");
-      expect(source).toContain("node-version: 22");
+      expect(normalizedSource).toContain("permissions:");
+      expect(normalizedSource).toContain("node-version: 22");
       for (const requiredText of evidence) {
-        expect(source).toContain(requiredText);
+        expect(normalizedSource).toContain(requiredText);
       }
     }
   );

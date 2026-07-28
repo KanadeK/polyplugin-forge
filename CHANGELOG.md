@@ -18,6 +18,7 @@ the project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Added a typed library API and human or JSON CLI output.
 - Added unit, integration, Playwright E2E, template, demo, benchmark, package,
   security, and release verification.
+- Made workflow evidence tests insensitive to LF versus CRLF checkouts.
 - Added bilingual documentation, architecture and threat-model references,
   checked-in examples, a real UI screenshot, and a dated public-repository
   comparison.
