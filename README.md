@@ -284,7 +284,7 @@ npm run release-check
 
 `npm run verify` runs formatting, lint, type checking, Vitest coverage, all
 template builds, Playwright E2E, and the production build. The v0.1.0 local
-baseline is 79 Vitest tests plus 7 Playwright tests, with 87.85% statement,
+baseline is 94 Vitest tests plus 7 Playwright tests, with 87.85% statement,
 80.78% branch, 94.49% function, and 87.77% line coverage. The domain core has
 95.10% line and 88.20% branch coverage.
 

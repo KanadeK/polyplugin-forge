@@ -7,6 +7,8 @@ the project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-07-28
+
 - Added a canonical `plugin.yaml` parser, strict schema, semantic policy, and
   redacted secret scanning.
 - Added complete MCP, VS Code, Chrome MV3, and OpenAPI webhook templates in
@@ -19,3 +21,6 @@ the project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Added bilingual documentation, architecture and threat-model references,
   checked-in examples, a real UI screenshot, and a dated public-repository
   comparison.
+
+[Unreleased]: https://github.com/KanadeK/polyplugin-forge/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/KanadeK/polyplugin-forge/releases/tag/v0.1.0
