@@ -1,0 +1,51 @@
+apiVersion: polyplugin.dev/v1alpha1
+kind: Plugin
+metadata:
+  id: {{json pluginId}}
+  name: {{json displayName}}
+  version: "0.1.0"
+  description: {{json description}}
+  license: MIT
+  package: {{json packageName}}
+runtime:
+  language: node
+  node: ">=22.0.0"
+  source: src
+  entry: src/extension.js
+target:
+  type: vscode
+  publisher: polyplugin
+  engine: "^1.95.0"
+capabilities:
+  - id: hello-command
+    type: vscode.command
+    name: hello
+    title: {{json displayName}}
+    description: {{json description}}
+    handler: src/extension.js
+    permissions: []
+    tests:
+      - test/extension.test.js
+    command: {{json pluginId}}
+permissions: []
+dataFlows: []
+privacy:
+  notice: "This extension processes the command locally and does not collect, retain, or transmit user data."
+  collectsPersonalData: false
+  telemetry: false
+compatibility:
+  os:
+    - linux
+    - darwin
+    - win32
+  arch:
+    - x64
+    - arm64
+  targetVersions:
+    - "^1.95.0"
+  features:
+    - commands
+tests:
+  command:
+    - npm
+    - test

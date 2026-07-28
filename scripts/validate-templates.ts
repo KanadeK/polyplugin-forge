@@ -9,7 +9,7 @@ import {
   stringifyManifest
 } from "../src/core/manifest-generator.js";
 import { parsePluginManifest } from "../src/core/plugin-schema.js";
-import { INITIAL_TEMPLATE_VERSION } from "../src/core/template-renderer.js";
+import { SUPPORTED_TEMPLATE_VERSIONS } from "../src/core/template-renderer.js";
 import { TEMPLATE_CASES } from "./template-cases.js";
 
 import type { PluginTarget } from "../src/core/model.js";
@@ -73,70 +73,79 @@ if (npmCli === undefined || npmCli.trim().length === 0) {
 }
 const summary: {
   kind: PluginTarget;
+  version: string;
   project: string;
   nativeManifest: string;
   commands: string[];
 }[] = [];
 
 try {
-  for (const templateCase of TEMPLATE_CASES) {
-    process.stderr.write(`Validating ${templateCase.kind} template...\n`);
-    const destination = join(validationRoot, templateCase.kind);
-    await scaffoldProject({
-      templateDirectory: join(
-        projectRoot,
-        "templates",
-        templateCase.kind,
-        INITIAL_TEMPLATE_VERSION
-      ),
-      destination,
-      kind: templateCase.kind,
-      version: INITIAL_TEMPLATE_VERSION,
-      answers: templateCase.answers
-    });
-
-    const parsed = parsePluginManifest(
-      await readFile(join(destination, "plugin.yaml"), "utf8")
-    );
-    if (!parsed.ok || parsed.value === undefined) {
-      throw new Error(
-        `${templateCase.kind} plugin.yaml is invalid\n${formatDiagnostics(parsed.diagnostics)}`
+  for (const version of SUPPORTED_TEMPLATE_VERSIONS) {
+    for (const templateCase of TEMPLATE_CASES) {
+      process.stderr.write(
+        `Validating ${templateCase.kind}@${version} template...\n`
       );
-    }
-
-    let existingNativeManifest: Readonly<Record<string, unknown>> | undefined;
-    if (templateCase.kind === "vscode") {
-      existingNativeManifest = JSON.parse(
-        await readFile(join(destination, "package.json"), "utf8")
-      ) as Readonly<Record<string, unknown>>;
-    }
-    const native = generateAndValidateManifest(
-      parsed.value,
-      existingNativeManifest
-    );
-    if (!native.ok || native.value === undefined) {
-      throw new Error(
-        `${templateCase.kind} native manifest is invalid\n${formatDiagnostics(native.diagnostics)}`
+      const destination = join(
+        validationRoot,
+        `${templateCase.kind}-${version}`
       );
+      await scaffoldProject({
+        templateDirectory: join(
+          projectRoot,
+          "templates",
+          templateCase.kind,
+          version
+        ),
+        destination,
+        kind: templateCase.kind,
+        version,
+        answers: templateCase.answers
+      });
+
+      const parsed = parsePluginManifest(
+        await readFile(join(destination, "plugin.yaml"), "utf8")
+      );
+      if (!parsed.ok || parsed.value === undefined) {
+        throw new Error(
+          `${templateCase.kind}@${version} plugin.yaml is invalid\n${formatDiagnostics(parsed.diagnostics)}`
+        );
+      }
+
+      let existingNativeManifest: Readonly<Record<string, unknown>> | undefined;
+      if (templateCase.kind === "vscode") {
+        existingNativeManifest = JSON.parse(
+          await readFile(join(destination, "package.json"), "utf8")
+        ) as Readonly<Record<string, unknown>>;
+      }
+      const native = generateAndValidateManifest(
+        parsed.value,
+        existingNativeManifest
+      );
+      if (!native.ok || native.value === undefined) {
+        throw new Error(
+          `${templateCase.kind}@${version} native manifest is invalid\n${formatDiagnostics(native.diagnostics)}`
+        );
+      }
+      const nativePath = join(destination, native.value.fileName);
+      await writeFile(nativePath, stringifyManifest(native.value), "utf8");
+
+      await run(
+        process.execPath,
+        [npmCli, "ci", "--ignore-scripts", "--offline"],
+        destination
+      );
+      await run(process.execPath, [npmCli, "test"], destination);
+      await run(process.execPath, [npmCli, "run", "build"], destination);
+      await access(join(destination, parsed.value.runtime.entry));
+
+      summary.push({
+        kind: templateCase.kind,
+        version,
+        project: destination,
+        nativeManifest: native.value.fileName,
+        commands: ["npm ci --offline", "npm test", "npm run build"]
+      });
     }
-    const nativePath = join(destination, native.value.fileName);
-    await writeFile(nativePath, stringifyManifest(native.value), "utf8");
-
-    await run(
-      process.execPath,
-      [npmCli, "ci", "--ignore-scripts", "--offline"],
-      destination
-    );
-    await run(process.execPath, [npmCli, "test"], destination);
-    await run(process.execPath, [npmCli, "run", "build"], destination);
-    await access(join(destination, parsed.value.runtime.entry));
-
-    summary.push({
-      kind: templateCase.kind,
-      project: destination,
-      nativeManifest: native.value.fileName,
-      commands: ["npm ci --offline", "npm test", "npm run build"]
-    });
   }
 
   process.stdout.write(

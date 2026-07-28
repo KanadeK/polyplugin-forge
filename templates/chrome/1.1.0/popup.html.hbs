@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{displayName}}</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="popup" aria-labelledby="popup-title">
+      <p class="eyebrow">Chrome MV3 extension</p>
+      <h1 id="popup-title">{{displayName}}</h1>
+      <p class="description">{{description}}</p>
+
+      <label for="greeting-name">Name to greet</label>
+      <div class="controls">
+        <input
+          id="greeting-name"
+          name="name"
+          type="text"
+          maxlength="80"
+          autocomplete="name"
+          placeholder="Ada"
+        />
+        <button id="greet-button" type="button">Say hello</button>
+      </div>
+
+      <p
+        id="greeting-output"
+        class="output"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        Enter a name, then press Enter or choose “Say hello”.
+      </p>
+    </main>
+    <script type="module" src="dist/popup.js"></script>
+  </body>
+</html>

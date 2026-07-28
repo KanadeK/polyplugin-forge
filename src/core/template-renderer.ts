@@ -3,6 +3,11 @@ import Handlebars from "handlebars";
 import type { PluginTarget } from "./model.js";
 
 export const INITIAL_TEMPLATE_VERSION = "1.0.0";
+export const LATEST_TEMPLATE_VERSION = "1.1.0";
+export const SUPPORTED_TEMPLATE_VERSIONS = [
+  INITIAL_TEMPLATE_VERSION,
+  LATEST_TEMPLATE_VERSION
+] as const;
 
 export interface TemplateAnswers {
   readonly pluginId: string;

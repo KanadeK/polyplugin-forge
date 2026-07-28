@@ -1,0 +1,146 @@
+#!/usr/bin/env node
+
+import { Buffer } from "node:buffer";
+import { createServer } from "node:http";
+import { pathToFileURL } from "node:url";
+
+const HOST = "127.0.0.1";
+const MAX_BODY_BYTES = 16 * 1024;
+const DISPLAY_NAME = {{json displayName}};
+
+function sendJson(response, statusCode, value, extraHeaders = {}) {
+  const body = JSON.stringify(value);
+  response.writeHead(statusCode, {
+    "content-type": "application/json; charset=utf-8",
+    "content-length": Buffer.byteLength(body),
+    "cache-control": "no-store",
+    ...extraHeaders
+  });
+  response.end(body);
+}
+
+async function readJsonBody(request) {
+  const chunks = [];
+  let byteLength = 0;
+  let tooLarge = false;
+
+  for await (const chunk of request) {
+    const buffer = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
+    byteLength += buffer.byteLength;
+    if (byteLength > MAX_BODY_BYTES) {
+      tooLarge = true;
+      continue;
+    }
+    chunks.push(buffer);
+  }
+
+  if (tooLarge) {
+    return { ok: false, status: 413, error: "body_too_large" };
+  }
+
+  try {
+    return {
+      ok: true,
+      value: JSON.parse(Buffer.concat(chunks).toString("utf8"))
+    };
+  } catch {
+    return { ok: false, status: 400, error: "invalid_json" };
+  }
+}
+
+function greeting(body) {
+  if (
+    typeof body !== "object" ||
+    body === null ||
+    Array.isArray(body) ||
+    typeof body.name !== "string"
+  ) {
+    return undefined;
+  }
+
+  const name = body.name.trim();
+  return name.length === 0 ? undefined : `Hello, ${name}!`;
+}
+
+async function handleRequest(request, response) {
+  const url = new URL(request.url ?? "/", `http://${HOST}`);
+  if (url.pathname !== "/hello") {
+    sendJson(response, 404, { error: "not_found" });
+    return;
+  }
+  if (request.method !== "POST") {
+    sendJson(
+      response,
+      405,
+      { error: "method_not_allowed" },
+      { allow: "POST" }
+    );
+    return;
+  }
+
+  const contentType = request.headers["content-type"] ?? "";
+  if (!contentType.toLowerCase().startsWith("application/json")) {
+    sendJson(response, 415, { error: "json_content_type_required" });
+    return;
+  }
+
+  const parsed = await readJsonBody(request);
+  if (!parsed.ok) {
+    sendJson(response, parsed.status, { error: parsed.error });
+    return;
+  }
+
+  const message = greeting(parsed.value);
+  if (message === undefined) {
+    sendJson(response, 422, { error: "name_must_be_non_empty" });
+    return;
+  }
+
+  sendJson(response, 200, { message });
+}
+
+export function createWebhookServer() {
+  return createServer((request, response) => {
+    void handleRequest(request, response).catch(() => {
+      if (!response.headersSent) {
+        sendJson(response, 500, { error: "internal_server_error" });
+      } else {
+        response.destroy();
+      }
+    });
+  });
+}
+
+function parsePort(value) {
+  const port = Number(value);
+  return Number.isInteger(port) && port >= 0 && port <= 65_535
+    ? port
+    : undefined;
+}
+
+export function runWebhookServer() {
+  const port = parsePort(process.env.PORT ?? "3000");
+  if (port === undefined) {
+    throw new TypeError("PORT must be an integer from 0 through 65535.");
+  }
+
+  const server = createWebhookServer();
+  server.listen(port, HOST, () => {
+    const address = server.address();
+    const activePort =
+      typeof address === "object" && address !== null
+        ? address.port
+        : port;
+    process.stderr.write(
+      `${DISPLAY_NAME} listening on http://${HOST}:${String(activePort)}\n`
+    );
+  });
+  return server;
+}
+
+if (
+  process.argv[1] !== undefined &&
+  import.meta.url === pathToFileURL(process.argv[1]).href
+) {
+  runWebhookServer();
+}

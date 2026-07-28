@@ -23,7 +23,9 @@ export {
 } from "./core/secret-scanner.js";
 export {
   INITIAL_TEMPLATE_VERSION,
+  LATEST_TEMPLATE_VERSION,
   renderTemplate,
+  SUPPORTED_TEMPLATE_VERSIONS,
   validateTemplateAnswers,
   validateTemplatePath
 } from "./core/template-renderer.js";
