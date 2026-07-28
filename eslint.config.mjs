@@ -9,8 +9,7 @@ export default tseslint.config(
       "dist-release/**",
       "demo-output/**",
       "eslint.config.mjs",
-      "examples/**/dist/**",
-      "examples/**/.polyplugin/**",
+      "examples/**",
       "node_modules/**"
     ]
   },

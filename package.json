@@ -33,8 +33,9 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "templates:verify": "tsx scripts/validate-templates.ts",
+    "test:e2e": "npm run build && playwright test",
     "typecheck": "tsc --noEmit",
-    "verify": "npm run format:check && npm run lint && npm run typecheck && npm run test:coverage && npm run build"
+    "verify": "npm run format:check && npm run lint && npm run typecheck && npm run test:coverage && npm run templates:verify && npm run test:e2e && npm run build"
   },
   "keywords": [
     "plugins",

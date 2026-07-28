@@ -76,14 +76,27 @@ export class CliFailure extends Error {
   }
 }
 
-function commandForPlatform(command: string): string {
-  if (
-    process.platform === "win32" &&
-    ["npm", "npx", "pnpm", "yarn"].includes(command)
-  ) {
-    return `${command}.cmd`;
+export interface ProcessInvocation {
+  readonly executable: string;
+  readonly arguments: readonly string[];
+}
+
+export function resolveProcessInvocation(
+  command: string,
+  args: readonly string[],
+  platform: NodeJS.Platform,
+  npmCli: string | undefined
+): ProcessInvocation {
+  if (platform === "win32" && command === "npm") {
+    if (npmCli === undefined || npmCli.trim().length === 0) {
+      throw new Error("npm_execpath is required to run npm safely on Windows");
+    }
+    return {
+      executable: process.execPath,
+      arguments: [npmCli, ...args]
+    };
   }
-  return command;
+  return { executable: command, arguments: args };
 }
 
 async function runProcess(
@@ -91,8 +104,14 @@ async function runProcess(
   args: readonly string[],
   cwd: string
 ): Promise<ProcessResult> {
+  const invocation = resolveProcessInvocation(
+    command,
+    args,
+    process.platform,
+    process.env["npm_execpath"]
+  );
   return await new Promise((resolvePromise, reject) => {
-    const child = spawn(commandForPlatform(command), [...args], {
+    const child = spawn(invocation.executable, invocation.arguments, {
       cwd,
       env: process.env,
       shell: false,
