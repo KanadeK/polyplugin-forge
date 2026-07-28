@@ -24,8 +24,10 @@
     "examples/*"
   ],
   "scripts": {
+    "benchmark": "tsx scripts/benchmark.ts",
     "build": "tsc -p tsconfig.build.json",
     "clean": "node scripts/clean.mjs",
+    "demo": "tsx scripts/demo.ts",
     "examples:generate": "tsx scripts/generate-examples.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
