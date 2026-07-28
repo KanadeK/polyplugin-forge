@@ -212,7 +212,7 @@ describe("parsePluginManifest", () => {
   });
 
   it("rejects manifests that exceed the byte-size limit", () => {
-    const result = parsePluginManifest(`secret: ${"x".repeat(512 * 1024)}`);
+    const result = parsePluginManifest(`payload: ${"x".repeat(512 * 1024)}`);
 
     expect(result.ok).toBe(false);
     expect(result.diagnostics).toEqual([

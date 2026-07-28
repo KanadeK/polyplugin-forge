@@ -1,0 +1,89 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Node 22 quality gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Verify pnpm frozen lockfile
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run complete verification
+        run: npm run verify
+
+      - name: Upload coverage and browser evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: verification-evidence
+          path: |
+            coverage/
+            playwright-report/
+            test-results/
+          if-no-files-found: warn
+          retention-days: 14
+
+  cross-platform:
+    name: ${{ matrix.os }} template verification
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build CLI
+        run: npm run build
+
+      - name: Verify all generated templates
+        run: npm run templates:verify

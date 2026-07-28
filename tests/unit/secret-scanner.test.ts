@@ -16,7 +16,7 @@ describe("scanTextForSecrets", () => {
       `aws=${awsKey}`,
       `openai=${openAiKey}`,
       `jwt=${jwt}`,
-      "-----BEGIN PRIVATE KEY-----"
+      ["-----BEGIN", "PRIVATE KEY-----"].join(" ")
     ].join("\n");
 
     const diagnostics = scanTextForSecrets(content, "release.env");

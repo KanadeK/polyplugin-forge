@@ -1,0 +1,69 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Verify and publish release
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Verify tag matches package version
+        shell: bash
+        run: |
+          test "v$(node -p "require('./package.json').version")" = "$GITHUB_REF_NAME"
+
+      - name: Run complete verification
+        run: npm run verify
+
+      - name: Build and verify release assets
+        run: npm run package
+
+      - name: Configure release identity
+        run: |
+          git config user.name "KanadeK"
+          git config user.email "121669563+KanadeK@users.noreply.github.com"
+
+      - name: Run release audit
+        run: npm run release-check
+
+      - name: Upload packaged evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: polyplugin-forge-${{ github.ref_name }}
+          path: dist-release/
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" dist-release/* \
+            --verify-tag \
+            --title "$GITHUB_REF_NAME" \
+            --generate-notes \
+            --latest
