@@ -131,6 +131,9 @@ npm install --global https://github.com/KanadeK/polyplugin-forge/releases/downlo
 Release 资产包含 npm tarball、四个可直接检查的模板 ZIP、兼容矩阵报告和
 `SHA256SUMS.txt`。
 
+tarball 包含 PolyPlugin
+Forge 本身；如果缓存中没有依赖，npm 会从用户配置的 registry 解析五个固定版本的运行时依赖。安装完成后，核心校验与生成仍可离线运行。
+
 ### 从源码安装
 
 ```bash
@@ -263,7 +266,7 @@ npm run release-check
 
 `npm run verify`
 依次运行格式、lint、类型检查、Vitest 覆盖率、所有模板构建、Playwright
-E2E 与生产构建。v0.1.0 本地基线为 94 个 Vitest 测试和 7 个 Playwright 测试；语句、分支、函数、行覆盖率分别为 87.85%、80.78%、94.49%、87.77%。领域核心行覆盖率为 95.10%，分支覆盖率为 88.20%。
+E2E 与生产构建。v0.1.0 本地基线为 96 个 Vitest 测试和 7 个 Playwright 测试；语句、分支、函数、行覆盖率分别为 87.85%、80.78%、94.49%、87.77%。领域核心行覆盖率为 95.10%，分支覆盖率为 88.20%。
 
 确定性基准使用四个仓库内插件和四个仓库内环境。机器、方法和结果见[基准报告](docs/BENCHMARK.md)。
 

@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 
 import { strFromU8, unzipSync } from "fflate";
 import { afterEach, describe, expect, it } from "vitest";
@@ -9,6 +9,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import {
   createDeterministicZip,
   releaseArtifactNames,
+  releaseInstallArguments,
   writeChecksums
 } from "../../scripts/package-release.js";
 import { parseChecksumManifest } from "../../scripts/release-check.js";
@@ -40,6 +41,25 @@ describe("release packaging", () => {
       matrix: "polyplugin-forge-0.1.0-compatibility-matrix.html",
       checksums: "SHA256SUMS.txt"
     });
+  });
+
+  it("clean-installs the local tarball without assuming a warm npm cache", () => {
+    const tarball = resolve("dist-release", "polyplugin-forge-0.1.0-npm.tgz");
+    const arguments_ = releaseInstallArguments(tarball);
+
+    expect(arguments_).toContain("--ignore-scripts");
+    expect(arguments_).toContain("--prefer-offline");
+    expect(arguments_).not.toContain("--offline");
+    expect(arguments_.at(-1)).toBe(tarball);
+  });
+
+  it("rejects ambiguous release tarball paths", () => {
+    expect(() => releaseInstallArguments("relative.tgz")).toThrow(
+      "absolute .tgz"
+    );
+    expect(() => releaseInstallArguments(resolve("release.zip"))).toThrow(
+      "absolute .tgz"
+    );
   });
 
   it("creates byte-identical, ordered ZIP output", () => {

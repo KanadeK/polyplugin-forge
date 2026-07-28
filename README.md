@@ -145,6 +145,10 @@ npm install --global https://github.com/KanadeK/polyplugin-forge/releases/downlo
 Release assets include the npm tarball, four ready-to-inspect template ZIPs, a
 compatibility report, and `SHA256SUMS.txt`.
 
+The tarball contains PolyPlugin Forge itself; npm resolves its five pinned
+runtime dependencies from your configured registry if they are not cached. After
+installation, core validation and generation remain offline-capable.
+
 ### From source
 
 ```bash
@@ -284,7 +288,7 @@ npm run release-check
 
 `npm run verify` runs formatting, lint, type checking, Vitest coverage, all
 template builds, Playwright E2E, and the production build. The v0.1.0 local
-baseline is 94 Vitest tests plus 7 Playwright tests, with 87.85% statement,
+baseline is 96 Vitest tests plus 7 Playwright tests, with 87.85% statement,
 80.78% branch, 94.49% function, and 87.77% line coverage. The domain core has
 95.10% line and 88.20% branch coverage.
 

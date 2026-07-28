@@ -12,7 +12,15 @@ import {
   writeFile
 } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { basename, dirname, join, relative, resolve, sep } from "node:path";
+import {
+  basename,
+  dirname,
+  isAbsolute,
+  join,
+  relative,
+  resolve,
+  sep
+} from "node:path";
 import { pathToFileURL } from "node:url";
 
 import { zipSync, type Zippable } from "fflate";
@@ -402,17 +410,7 @@ async function verifyInstalledTarball(
     )}\n`,
     "utf8"
   );
-  await runNpm(
-    [
-      "install",
-      "--ignore-scripts",
-      "--offline",
-      "--no-audit",
-      "--no-fund",
-      tarball
-    ],
-    consumer
-  );
+  await runNpm(releaseInstallArguments(tarball), consumer);
 
   const packageSegments = packageName.split("/");
   const cli = join(
@@ -426,6 +424,20 @@ async function verifyInstalledTarball(
   if (result.stdout.trim() !== version) {
     throw new Error("Installed CLI reported an unexpected version");
   }
+}
+
+export function releaseInstallArguments(tarball: string): readonly string[] {
+  if (!isAbsolute(tarball) || !tarball.endsWith(".tgz")) {
+    throw new TypeError("Release tarball path must be an absolute .tgz path");
+  }
+  return [
+    "install",
+    "--ignore-scripts",
+    "--prefer-offline",
+    "--no-audit",
+    "--no-fund",
+    tarball
+  ];
 }
 
 function sha256(content: Uint8Array): string {

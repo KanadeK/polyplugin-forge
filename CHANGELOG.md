@@ -19,6 +19,8 @@ the project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Added unit, integration, Playwright E2E, template, demo, benchmark, package,
   security, and release verification.
 - Made workflow evidence tests insensitive to LF versus CRLF checkouts.
+- Made clean tarball installation cache-preferred instead of cache-required, so
+  an empty Linux CI cache still verifies the real dependency install path.
 - Added bilingual documentation, architecture and threat-model references,
   checked-in examples, a real UI screenshot, and a dated public-repository
   comparison.

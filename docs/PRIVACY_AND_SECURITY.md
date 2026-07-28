@@ -128,9 +128,11 @@ checksum, Git identity, and clean-worktree checks.
 
 `npm run package` creates deterministic template ZIPs, a packed npm tarball, a
 compatibility HTML report, and `SHA256SUMS.txt`. The tarball is installed in a
-fresh directory without registry dependency and its CLI version is checked. Each
-template artifact is generated from a bundled template, installed from its
-lockfile, tested, built, and checked for its declared entry before archiving.
+fresh directory and its CLI version is checked. npm may resolve the package's
+pinned runtime dependencies from the configured registry when they are not
+already cached. Each template artifact is generated from a bundled template,
+installed from its lockfile, tested, built, and checked for its declared entry
+before archiving.
 
 Consumers should download the checksum file from the same GitHub Release and
 verify it with a trusted SHA-256 tool.
