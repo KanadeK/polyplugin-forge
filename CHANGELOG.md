@@ -7,6 +7,9 @@ the project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+- Made dense secret scanning near-linear while preserving detector priority,
+  overlap deduplication, redaction, and exact source locations.
+
 ## [0.1.0] - 2026-07-28
 
 - Added a canonical `plugin.yaml` parser, strict schema, semantic policy, and

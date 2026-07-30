@@ -82,6 +82,30 @@ describe("scanTextForSecrets", () => {
     expect(diagnostics[0]?.code).toBe("secret.github-token");
     expect(JSON.stringify(diagnostics)).not.toContain(token);
   });
+
+  it("reports dense findings in deterministic source order", () => {
+    const findingCount = 5_000;
+    const content = Array.from(
+      { length: findingCount },
+      (_, index) => `password=value-${String(index).padStart(8, "0")}-abcdef`
+    ).join("\n");
+
+    const diagnostics = scanTextForSecrets(content, "dense.env");
+
+    expect(diagnostics).toHaveLength(findingCount);
+    expect(diagnostics[0]).toMatchObject({
+      code: "secret.assigned-value",
+      path: "dense.env",
+      hint: "line 1, column 1; remove the credential and reference a runtime secret instead"
+    });
+    expect(diagnostics.at(-1)).toMatchObject({
+      code: "secret.assigned-value",
+      path: "dense.env",
+      hint: `line ${String(
+        findingCount
+      )}, column 1; remove the credential and reference a runtime secret instead`
+    });
+  });
 });
 
 describe("scanFilesForSecrets", () => {

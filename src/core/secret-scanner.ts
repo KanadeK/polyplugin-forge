@@ -90,6 +90,101 @@ function overlaps(left: SecretFinding, right: SecretFinding): boolean {
   return left.start < right.end && right.start < left.end;
 }
 
+function compareByLocation(left: SecretFinding, right: SecretFinding): number {
+  return (
+    left.start - right.start ||
+    left.detector.code.localeCompare(right.detector.code)
+  );
+}
+
+function mergeByLocation(
+  left: readonly SecretFinding[],
+  right: readonly SecretFinding[]
+): readonly SecretFinding[] {
+  const merged: SecretFinding[] = [];
+  let leftIndex = 0;
+  let rightIndex = 0;
+
+  while (leftIndex < left.length || rightIndex < right.length) {
+    const leftFinding = left[leftIndex];
+    const rightFinding = right[rightIndex];
+    if (leftFinding === undefined) {
+      if (rightFinding === undefined) {
+        break;
+      }
+      merged.push(rightFinding);
+      rightIndex += 1;
+    } else if (
+      rightFinding === undefined ||
+      compareByLocation(leftFinding, rightFinding) <= 0
+    ) {
+      merged.push(leftFinding);
+      leftIndex += 1;
+    } else {
+      merged.push(rightFinding);
+      rightIndex += 1;
+    }
+  }
+
+  return merged;
+}
+
+function selectNonOverlappingFindings(
+  candidates: readonly SecretFinding[]
+): readonly SecretFinding[] {
+  const prioritized = [...candidates].sort(
+    (left, right) =>
+      right.detector.priority - left.detector.priority ||
+      compareByLocation(left, right)
+  );
+  let accepted: readonly SecretFinding[] = [];
+  let candidateIndex = 0;
+
+  // Equal-priority candidates arrive in source order. Accepted intervals are
+  // kept sorted and non-overlapping, so each priority group needs only one
+  // forward pass before a linear merge with higher-priority findings.
+  while (candidateIndex < prioritized.length) {
+    const priority = prioritized[candidateIndex]?.detector.priority;
+    const acceptedAtPriority: SecretFinding[] = [];
+    let acceptedIndex = 0;
+
+    while (
+      candidateIndex < prioritized.length &&
+      prioritized[candidateIndex]?.detector.priority === priority
+    ) {
+      const candidate = prioritized[candidateIndex];
+      candidateIndex += 1;
+      if (candidate === undefined) {
+        continue;
+      }
+
+      while (
+        acceptedIndex < accepted.length &&
+        (accepted[acceptedIndex]?.end ?? 0) <= candidate.start
+      ) {
+        acceptedIndex += 1;
+      }
+
+      const higherPriorityFinding = accepted[acceptedIndex];
+      const previousAtPriority = acceptedAtPriority.at(-1);
+      if (
+        (higherPriorityFinding !== undefined &&
+          overlaps(higherPriorityFinding, candidate)) ||
+        (previousAtPriority !== undefined &&
+          overlaps(previousAtPriority, candidate))
+      ) {
+        continue;
+      }
+
+      acceptedAtPriority.push(candidate);
+    }
+
+    accepted = mergeByLocation(accepted, acceptedAtPriority);
+  }
+
+  return accepted;
+}
+
 function collectFindings(content: string): readonly SecretFinding[] {
   const candidates: SecretFinding[] = [];
 
@@ -113,57 +208,36 @@ function collectFindings(content: string): readonly SecretFinding[] {
     }
   }
 
-  const accepted: SecretFinding[] = [];
-  for (const candidate of [...candidates].sort(
-    (left, right) =>
-      right.detector.priority - left.detector.priority ||
-      left.start - right.start ||
-      left.detector.code.localeCompare(right.detector.code)
-  )) {
-    if (!accepted.some((finding) => overlaps(finding, candidate))) {
-      accepted.push(candidate);
-    }
-  }
-
-  return accepted.sort(
-    (left, right) =>
-      left.start - right.start ||
-      left.detector.code.localeCompare(right.detector.code)
-  );
-}
-
-function lineAndColumn(
-  content: string,
-  offset: number
-): { readonly line: number; readonly column: number } {
-  let line = 1;
-  let column = 1;
-
-  for (let index = 0; index < offset; index += 1) {
-    if (content[index] === "\n") {
-      line += 1;
-      column = 1;
-    } else {
-      column += 1;
-    }
-  }
-
-  return { line, column };
+  return selectNonOverlappingFindings(candidates);
 }
 
 export function scanTextForSecrets(
   content: string,
   path = "<memory>"
 ): readonly Diagnostic[] {
-  return collectFindings(content).map((finding) => {
-    const location = lineAndColumn(content, finding.start);
+  const findings = collectFindings(content);
+  let offset = 0;
+  let line = 1;
+  let column = 1;
+
+  return findings.map((finding) => {
+    while (offset < finding.start) {
+      if (content[offset] === "\n") {
+        line += 1;
+        column = 1;
+      } else {
+        column += 1;
+      }
+      offset += 1;
+    }
+
     return diagnostic(
       finding.detector.code,
       `Potential ${finding.detector.label} detected.`,
       "error",
       path,
-      `line ${String(location.line)}, column ${String(
-        location.column
+      `line ${String(line)}, column ${String(
+        column
       )}; remove the credential and reference a runtime secret instead`
     );
   });
