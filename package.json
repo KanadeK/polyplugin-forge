@@ -64,7 +64,7 @@
     "commander": "15.0.0",
     "handlebars": "4.7.9",
     "semver": "7.8.5",
-    "yaml": "2.9.0",
+    "yaml": "2.9.1",
     "zod": "4.4.3"
   },
   "devDependencies": {
