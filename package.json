@@ -65,7 +65,7 @@
     "handlebars": "4.7.9",
     "semver": "7.8.5",
     "yaml": "2.9.0",
-    "zod": "4.4.3"
+    "zod": "4.6.6"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
