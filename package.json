@@ -62,7 +62,7 @@
   "homepage": "https://github.com/KanadeK/polyplugin-forge#readme",
   "dependencies": {
     "commander": "15.0.0",
-    "handlebars": "4.7.9",
+    "handlebars": "4.7.10",
     "semver": "7.8.5",
     "yaml": "2.9.0",
     "zod": "4.4.3"
